@@ -2,13 +2,15 @@
 body {
   margin: 0;
   font-family: 'Poppins', sans-serif;
-  background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+  background-image: url(/public/img1.jpg);
   color: white;
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
   overflow: hidden;
+  background-size: cover; /* Optional: Ensures the image covers the entire element */
+  background-position: center; 
 }
 
 .app {
