@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState } from 'react';
 import './App.css';
 import YouTube from 'react-youtube';
 
@@ -9,13 +9,13 @@ const App = () => {
 
   const apiKey = 'AIzaSyD9coAqRL1IC0iAwm2HOhKNwsGVBUOvuy0'; // Replace with your YouTube API key
 
-  // Adding useCallback with proper dependencies
-  const fetchSuggestions = useCallback(async () => {
-    if (searchQuery.length > 2) {
+  const handleSearch = async (e) => {
+    setSearchQuery(e.target.value);
+    if (e.target.value.length > 2) {
       try {
         const response = await fetch(
           `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(
-            searchQuery
+            e.target.value
           )}&type=video&key=${apiKey}`
         );
         const data = await response.json();
@@ -26,10 +26,6 @@ const App = () => {
     } else {
       setSuggestions([]);
     }
-  }, [searchQuery, apiKey]);
-
-  const handleSearch = (e) => {
-    setSearchQuery(e.target.value);
   };
 
   const selectSong = (videoId) => {
