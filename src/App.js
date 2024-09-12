@@ -12,26 +12,22 @@ const App = () => {
   const handleSearch = async (e) => {
     setSearchQuery(e.target.value);
     if (e.target.value.length > 2) {
-      try {
-        const response = await fetch(
-          `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(
-            e.target.value
-          )}&type=video&key=${apiKey}`
-        );
-        const data = await response.json();
-        setSuggestions(data.items || []);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
+      const response = await fetch(
+        `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(
+          e.target.value
+        )}&type=video&key=${apiKey}`
+      );
+      const data = await response.json();
+      setSuggestions(data.items);
     } else {
-      setSuggestions([]);
+      setSuggestions([]); // Hide suggestions when search query is too short
     }
   };
 
   const selectSong = (videoId) => {
     setVideoId(videoId);
     setSearchQuery('');
-    setSuggestions([]);
+    setSuggestions([]); // Clear suggestions after a selection
   };
 
   const opts = {
@@ -44,7 +40,7 @@ const App = () => {
 
   return (
     <div className="app">
-      <h1>GWCF Official Music Player</h1>
+      <h1>YouTube Music Player</h1>
       <div className="search-container">
         <input
           type="text"
