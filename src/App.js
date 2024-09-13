@@ -1,7 +1,8 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState } from 'react';
 import './App.css';
 import YouTube from 'react-youtube';
 import debounce from 'lodash.debounce';
+
 
 const App = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -12,31 +13,29 @@ const App = () => {
   const apiKey = 'AIzaSyAIR7_ncBYuYf1MeZzLSpWLnVLcnyWE0h8'; // Replace with your YouTube API key
 
   // Debounced search function
-  const handleSearch = useCallback(
-    debounce(async (query) => {
-      if (query.length > 2) {
-        try {
-          const response = await fetch(
-            `https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&q=${encodeURIComponent(query)}&key=${apiKey}`
-          );
-          if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(`Error ${response.status}: ${errorData.error.message}`);
-          }
-          const data = await response.json();
-          setSuggestions(data.items || []);
-          setError(null); // Clear error if successful
-        } catch (error) {
-          console.error('Error fetching data:', error);
-          setSuggestions([]);
-          setError('Limit nata sa qouta brother paabot napud ta next day kay limit raman ni. kaluwasan ramay libri');
+  const handleSearch = debounce(async (query) => {
+    if (query.length > 2) {
+      try {
+        const response = await fetch(
+          `https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&q=${encodeURIComponent(query)}&key=${apiKey}`
+        );
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(`Error ${response.status}: ${errorData.error.message}`);
         }
-      } else {
+        const data = await response.json();
+        setSuggestions(data.items || []);
+        setError(null); // Clear error if successful
+      } catch (error) {
+        console.error('Error fetching data:', error);
         setSuggestions([]);
+        setError('Limit nata sa qouta brother paabot napud ta next day kay limit raman ni. kaluwasan ramay libri');
       }
-    }, 300),
-    []
-  );
+    } else {
+      setSuggestions([]);
+    }
+  }, 300);
+  
 
   const handleInputChange = (e) => {
     const query = e.target.value;
